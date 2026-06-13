@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Invyra Portal — Reset Password</title>
 <meta name="description" content="Portal reset password workflow." />
-<link rel="icon" href="/logo.png" />
-<link rel="stylesheet" href="/app/portal.css" />
+<link rel="icon" href="/invyra-website/logo.png" />
+<link rel="stylesheet" href="/invyra-website/app/portal.css" />
 </head>
 <body class="portal-app-body">
 <div class="portal-app-shell">
   <aside class="portal-app-sidebar">
-    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <a class="portal-app-brand" href="/invyra-website/portal/"><img src="/invyra-website/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
     <nav class="portal-app-nav" aria-label="Portal navigation">
-      <a class="active" href="/app/">Login</a>
-      <a class="" href="/app/dashboard.html">Inventory Dashboard</a>
-      <a href="/app/device-activation.html">Device Activation</a>
-      <a href="/app/request-access.html">Request Access</a>
-      <a href="/app/forgot-password.html">Forgot Password</a>
+      <a class="active" href="/invyra-website/app/">Login</a>
+      <a class="" href="/invyra-website/app/dashboard.html">Inventory Dashboard</a>
+      <a href="/invyra-website/app/device-activation.html">Device Activation</a>
+      <a href="/invyra-website/app/request-access.html">Request Access</a>
+      <a href="/invyra-website/app/forgot-password.html">Forgot Password</a>
       <span class="locked">CRM · Future module</span>
       <span class="locked">POS · Future module</span>
     </nav>
@@ -35,12 +35,12 @@
         <p class="p">This completes the recovery workflow and returns the user to the secure Inventory login path.</p>
       </article>
       <aside class="portal-auth-card">
-        <form class="portal-auth-form" action="/app/" method="get">
+        <form class="portal-auth-form" action="/invyra-website/app/" method="get">
           <label>Reset token<input name="token" autocomplete="one-time-code" placeholder="Reset token" required /></label>
           <label>New password<input name="password" type="password" autocomplete="new-password" minlength="12" required /></label>
           <button class="btn" type="submit">Update password</button>
         </form>
-        <div class="portal-auth-links"><a href="/app/forgot-password.html">Request a new token</a><a href="/app/">Back to login</a></div>
+        <div class="portal-auth-links"><a href="/invyra-website/app/forgot-password.html">Request a new token</a><a href="/invyra-website/app/">Back to login</a></div>
       </aside>
     </section>
 

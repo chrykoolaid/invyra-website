@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Invyra Portal Login — Inventory First</title>
 <meta name="description" content="Inventory-first portal login workflow preview." />
-<link rel="icon" href="/logo.png" />
-<link rel="stylesheet" href="/app/portal.css" />
+<link rel="icon" href="/invyra-website/logo.png" />
+<link rel="stylesheet" href="/invyra-website/app/portal.css" />
 </head>
 <body class="portal-app-body">
 <div class="portal-app-shell">
   <aside class="portal-app-sidebar">
-    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <a class="portal-app-brand" href="/invyra-website/portal/"><img src="/invyra-website/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
     <nav class="portal-app-nav" aria-label="Portal navigation">
-      <a class="active" href="/app/">Login</a>
-      <a class="" href="/app/dashboard.html">Inventory Dashboard</a>
-      <a href="/app/device-activation.html">Device Activation</a>
-      <a href="/app/request-access.html">Request Access</a>
-      <a href="/app/forgot-password.html">Forgot Password</a>
+      <a class="active" href="/invyra-website/app/">Login</a>
+      <a class="" href="/invyra-website/app/dashboard.html">Inventory Dashboard</a>
+      <a href="/invyra-website/app/device-activation.html">Device Activation</a>
+      <a href="/invyra-website/app/request-access.html">Request Access</a>
+      <a href="/invyra-website/app/forgot-password.html">Forgot Password</a>
       <span class="locked">CRM · Future module</span>
       <span class="locked">POS · Future module</span>
     </nav>
@@ -42,7 +42,7 @@
       </article>
       <aside class="portal-auth-card">
         <p class="portal-auth-error" data-session-notice hidden></p>
-        <form class="portal-auth-form" action="/app/dashboard.html" method="get" data-demo-login-form>
+        <form class="portal-auth-form" action="/invyra-website/app/dashboard.html" method="get" data-demo-login-form>
           <label>Email or username<input name="identifier" type="email" autocomplete="username" placeholder="owner@demo.invyra" required /></label>
           <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="••••••••••••" required /></label>
           <label>Environment<select name="environment"><option>TRAINING</option><option>TEST</option><option>LIVE</option></select></label>
@@ -62,9 +62,9 @@
         </div>
 
         <div class="portal-auth-links">
-          <a href="/app/forgot-password.html">Forgot password</a>
-          <a href="/app/request-access.html">Request Inventory access</a>
-          <a href="/app/device-activation.html">Activate device</a>
+          <a href="/invyra-website/app/forgot-password.html">Forgot password</a>
+          <a href="/invyra-website/app/request-access.html">Request Inventory access</a>
+          <a href="/invyra-website/app/device-activation.html">Activate device</a>
         </div>
         <p class="portal-auth-note">Static preview only: in production this form maps to the protected platform login API and redirects to the real customer portal after session creation.</p>
       </aside>
@@ -72,6 +72,6 @@
 
   </main>
 </div>
-<script src="/app/portal-demo-auth.js"></script>
+<script src="/invyra-website/app/portal-demo-auth.js"></script>
 </body>
 </html>

@@ -92,7 +92,7 @@
         environment,
         loggedInAt: new Date().toISOString()
       });
-      window.location.href = '/app/dashboard.html';
+      window.location.href = '/invyra-website/app/dashboard.html';
     });
   }
 
@@ -101,7 +101,7 @@
     if(!dashboard) return;
     const session = loadSession();
     if(!session){
-      window.location.href = '/app/?reason=session-required';
+      window.location.href = '/invyra-website/app/?reason=session-required';
       return;
     }
 
@@ -117,7 +117,7 @@
       logout.addEventListener('click', (event) => {
         event.preventDefault();
         clearSession();
-        window.location.href = '/app/';
+        window.location.href = '/invyra-website/app/';
       });
     }
   }
