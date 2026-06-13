@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal · Consumption &amp; Cost Centers</title>
+<meta name="description" content="Invyra Inventory portal workflow preview for Consumption &amp; Cost Centers." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a href="/app/">Login</a>
+      <a href="/app/dashboard.html">Inventory Dashboard</a>
+      <a class="active" href="/app/workflows/consumption-cost-centers.html">Sprint 7 Workflow</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main" data-demo-dashboard>
+    <header class="portal-app-topbar">
+      <div><strong data-demo-org>ACME Retail Group</strong><small data-demo-context>Owner · LIVE · Inventory licence active</small></div>
+      <div class="portal-app-pills"><span data-demo-env>Environment: LIVE</span><span data-demo-device>Device: Activated</span><span data-demo-role>Role: Owner</span><span>Tenant isolated</span><a class="portal-logout-pill" href="/app/" data-demo-logout>Logout</a></div>
+    </header>
+
+    <section class="portal-auth-card portal-workflow-hero">
+      <p class="badge">Sprint 7</p>
+      <h1>Consumption &amp; Cost Centers</h1>
+      <p class="p">Track store use, internal consumption, templates, and cost allocation by department or cost center.</p>
+      <div class="portal-auth-note"><strong>Status:</strong> Cost allocation ready. Preview actions are visible for portal validation; production database mutation remains gated until backend/runtime certification.</div>
+    </section>
+
+    <section class="portal-dashboard-grid portal-kpi-grid"><article class="portal-dashboard-card"><span>Store use drafts</span><strong>5</strong></article><article class="portal-dashboard-card"><span>Cost centers</span><strong>14</strong></article><article class="portal-dashboard-card"><span>Templates</span><strong>8</strong></article><article class="portal-dashboard-card"><span>Unallocated</span><strong>0</strong></article></section>
+
+    <section class="portal-workflow-layout">
+      <article class="portal-auth-card">
+        <h2>Workflow queue</h2>
+        <p class="p">This screen confirms the sprint card opens a real workflow workspace instead of a dead link.</p>
+        <div class="row portal-action-row"><button type="button" class="btn" data-preview-action="Record store use">Record store use</button><button type="button" class="btn" data-preview-action="Apply template">Apply template</button><button type="button" class="btn" data-preview-action="Assign cost center">Assign cost center</button><button type="button" class="btn" data-preview-action="Review allocation report">Review allocation report</button></div>
+        <p class="portal-inline-notice" hidden data-preview-action-notice></p>
+        <div class="table-wrap">
+          <table class="table"><thead><tr><th>Use ID</th><th>Cost Center</th><th>Item</th><th>Qty</th><th>Status</th></tr></thead><tbody><tr><td>USE-771</td><td>Laundry Operations</td><td>Detergent 5L</td><td>1</td><td>Approved</td></tr><tr><td>USE-772</td><td>Cleaning Supplies</td><td>Paper Towels</td><td>6</td><td>Draft</td></tr><tr><td>USE-773</td><td>Training</td><td>Sample Kit</td><td>2</td><td>Posted</td></tr></tbody></table>
+        </div>
+      </article>
+
+      <aside class="portal-auth-card">
+        <h2>Control flow</h2>
+        <ol class="portal-control-flow"><li>Select consumption template or item</li><li>Choose cost center</li><li>Approve internal use</li><li>Post consumption movement and cost allocation</li></ol>
+        <div class="hr"></div>
+        <p class="small"><strong>Access rule:</strong> Inventory licence, role, device, tenant, and environment context must all pass before this workflow becomes operational.</p>
+        <a class="btn secondary portal-back-btn" href="/app/dashboard.html#workflows">Back to dashboard</a>
+      </aside>
+    </section>
+  </main>
+</div>
+<script src="/app/portal-demo-auth.js"></script>
+</body>
+</html>

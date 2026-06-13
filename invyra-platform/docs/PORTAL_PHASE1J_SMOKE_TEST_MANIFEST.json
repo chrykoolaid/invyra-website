@@ -1,0 +1,65 @@
+{
+  "phase": "Portal Phase 1J",
+  "title": "Inventory Portal Runtime Smoke Test Pack",
+  "purpose": "Verify the Inventory-first protected portal routes in a local runtime without introducing new backend functionality.",
+  "baseUrlDefault": "http://localhost:3000",
+  "environmentVariables": [
+    "INVYRA_PLATFORM_URL",
+    "INVYRA_SEED_PASSWORD",
+    "INVYRA_OWNER_LOGIN",
+    "INVYRA_STAFF_LOGIN",
+    "INVYRA_PORTAL_SMOKE_INCLUDE_STAFF",
+    "INVYRA_PORTAL_SMOKE_RESULTS"
+  ],
+  "loggedOutRedirectRoutes": [
+    "/portal",
+    "/portal/inventory",
+    "/portal/inventory/configuration"
+  ],
+  "ownerExpected200Routes": [
+    "/portal",
+    "/portal/inventory",
+    "/portal/inventory/items",
+    "/portal/inventory/movements",
+    "/portal/inventory/suppliers",
+    "/portal/inventory/orders",
+    "/portal/inventory/receiving",
+    "/portal/inventory/wastage",
+    "/portal/inventory/store-use",
+    "/portal/inventory/reorder-review",
+    "/portal/inventory/gap-scan",
+    "/portal/inventory/stocktake",
+    "/portal/inventory/reports",
+    "/portal/inventory/training-mode",
+    "/portal/inventory/readiness",
+    "/portal/inventory/setup",
+    "/portal/inventory/imports",
+    "/portal/inventory/configuration",
+    "/portal/licensing",
+    "/portal/crm",
+    "/portal/pos",
+    "/portal/roadmap/forecasting",
+    "/portal/roadmap/purchasing-extensions",
+    "/portal/roadmap/payroll",
+    "/portal/roadmap/time-tracking",
+    "/portal/roadmap/advanced-integrations"
+  ],
+  "contentAssertions": {
+    "/portal/inventory": ["Inventory Dashboard", "Inventory First", "Not Connected"],
+    "/portal/inventory/items": ["Items", "Backend Contract Needed", "No live workflow data"],
+    "/portal/inventory/readiness": ["Inventory Readiness", "backend", "LIVE"],
+    "/portal/inventory/imports": ["Data Import", "Uploads remain disabled", "No database writes"],
+    "/portal/inventory/configuration": ["Admin Configuration", "disabled", "does not save settings"],
+    "/portal/crm": ["Future Module", "Coming Later", "No Launch"],
+    "/portal/pos": ["Future Module", "Coming Later", "No Launch"],
+    "/portal/roadmap/forecasting": ["Roadmap Module", "Inventory First", "No Launch"]
+  },
+  "nonGoals": [
+    "No uploads",
+    "No CSV parser",
+    "No Prisma writes",
+    "No live stock mutation",
+    "No CRM operational launch",
+    "No POS operational launch"
+  ]
+}

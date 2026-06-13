@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal · Receiving</title>
+<meta name="description" content="Invyra Inventory portal workflow preview for Receiving." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a href="/app/">Login</a>
+      <a href="/app/dashboard.html">Inventory Dashboard</a>
+      <a class="active" href="/app/workflows/receiving.html">Sprint 4 Workflow</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main" data-demo-dashboard>
+    <header class="portal-app-topbar">
+      <div><strong data-demo-org>ACME Retail Group</strong><small data-demo-context>Owner · LIVE · Inventory licence active</small></div>
+      <div class="portal-app-pills"><span data-demo-env>Environment: LIVE</span><span data-demo-device>Device: Activated</span><span data-demo-role>Role: Owner</span><span>Tenant isolated</span><a class="portal-logout-pill" href="/app/" data-demo-logout>Logout</a></div>
+    </header>
+
+    <section class="portal-auth-card portal-workflow-hero">
+      <p class="badge">Sprint 4</p>
+      <h1>Receiving</h1>
+      <p class="p">Receive purchase orders in full or partial quantities, record discrepancies, damages, and receipt evidence.</p>
+      <div class="portal-auth-note"><strong>Status:</strong> Receiving controlled. Preview actions are visible for portal validation; production database mutation remains gated until backend/runtime certification.</div>
+    </section>
+
+    <section class="portal-dashboard-grid portal-kpi-grid"><article class="portal-dashboard-card"><span>Due receipts</span><strong>5</strong></article><article class="portal-dashboard-card"><span>Partial receipts</span><strong>2</strong></article><article class="portal-dashboard-card"><span>Discrepancies</span><strong>1 open</strong></article><article class="portal-dashboard-card"><span>Damage claims</span><strong>0 critical</strong></article></section>
+
+    <section class="portal-workflow-layout">
+      <article class="portal-auth-card">
+        <h2>Workflow queue</h2>
+        <p class="p">This screen confirms the sprint card opens a real workflow workspace instead of a dead link.</p>
+        <div class="row portal-action-row"><button type="button" class="btn" data-preview-action="Open receiving queue">Open receiving queue</button><button type="button" class="btn" data-preview-action="Record full receipt">Record full receipt</button><button type="button" class="btn" data-preview-action="Record partial receipt">Record partial receipt</button><button type="button" class="btn" data-preview-action="Log discrepancy">Log discrepancy</button></div>
+        <p class="portal-inline-notice" hidden data-preview-action-notice></p>
+        <div class="table-wrap">
+          <table class="table"><thead><tr><th>Receipt</th><th>PO</th><th>Supplier</th><th>Status</th><th>Exception</th></tr></thead><tbody><tr><td>RCV-8041</td><td>PO-10045</td><td>CleanPro Supply</td><td>Partial</td><td>2 units short</td></tr><tr><td>RCV-8042</td><td>PO-10047</td><td>Fresh Goods Co.</td><td>Complete</td><td>None</td></tr><tr><td>RCV-8043</td><td>PO-10044</td><td>Island Wholesale</td><td>Pending</td><td>Awaiting delivery</td></tr></tbody></table>
+        </div>
+      </article>
+
+      <aside class="portal-auth-card">
+        <h2>Control flow</h2>
+        <ol class="portal-control-flow"><li>Match PO lines</li><li>Count received goods</li><li>Record discrepancy or damage</li><li>Post receipt movement to ledger</li></ol>
+        <div class="hr"></div>
+        <p class="small"><strong>Access rule:</strong> Inventory licence, role, device, tenant, and environment context must all pass before this workflow becomes operational.</p>
+        <a class="btn secondary portal-back-btn" href="/app/dashboard.html#workflows">Back to dashboard</a>
+      </aside>
+    </section>
+  </main>
+</div>
+<script src="/app/portal-demo-auth.js"></script>
+</body>
+</html>

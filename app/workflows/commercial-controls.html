@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal · Commercial Hardening Controls</title>
+<meta name="description" content="Invyra Inventory portal workflow preview for Commercial Hardening Controls." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a href="/app/">Login</a>
+      <a href="/app/dashboard.html">Inventory Dashboard</a>
+      <a class="active" href="/app/workflows/commercial-controls.html">Sprint 10 Workflow</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main" data-demo-dashboard>
+    <header class="portal-app-topbar">
+      <div><strong data-demo-org>ACME Retail Group</strong><small data-demo-context>Owner · LIVE · Inventory licence active</small></div>
+      <div class="portal-app-pills"><span data-demo-env>Environment: LIVE</span><span data-demo-device>Device: Activated</span><span data-demo-role>Role: Owner</span><span>Tenant isolated</span><a class="portal-logout-pill" href="/app/" data-demo-logout>Logout</a></div>
+    </header>
+
+    <section class="portal-auth-card portal-workflow-hero">
+      <p class="badge">Sprint 10</p>
+      <h1>Commercial Hardening Controls</h1>
+      <p class="p">Verify licensing, tenant isolation, device activation, environment separation, audit logging, and support readiness controls.</p>
+      <div class="portal-auth-note"><strong>Status:</strong> Commercial controls preview. Preview actions are visible for portal validation; production database mutation remains gated until backend/runtime certification.</div>
+    </section>
+
+    <section class="portal-dashboard-grid portal-kpi-grid"><article class="portal-dashboard-card"><span>Licence</span><strong>Inventory active</strong></article><article class="portal-dashboard-card"><span>Tenant isolation</span><strong>Pass</strong></article><article class="portal-dashboard-card"><span>Device context</span><strong>Activated</strong></article><article class="portal-dashboard-card"><span>Audit logging</span><strong>Enabled</strong></article></section>
+
+    <section class="portal-workflow-layout">
+      <article class="portal-auth-card">
+        <h2>Workflow queue</h2>
+        <p class="p">This screen confirms the sprint card opens a real workflow workspace instead of a dead link.</p>
+        <div class="row portal-action-row"><button type="button" class="btn" data-preview-action="Run control check">Run control check</button><button type="button" class="btn" data-preview-action="Review audit trail">Review audit trail</button><button type="button" class="btn" data-preview-action="Inspect environment">Inspect environment</button><button type="button" class="btn" data-preview-action="Open support handoff">Open support handoff</button></div>
+        <p class="portal-inline-notice" hidden data-preview-action-notice></p>
+        <div class="table-wrap">
+          <table class="table"><thead><tr><th>Control</th><th>Scope</th><th>Result</th><th>Evidence</th><th>Risk</th></tr></thead><tbody><tr><td>Licensing</td><td>Inventory module</td><td>Pass</td><td>Active entitlement</td><td>Low</td></tr><tr><td>Environment</td><td>LIVE/TRAINING/TEST</td><td>Pass</td><td>Separated context</td><td>Low</td></tr><tr><td>Device</td><td>Activation required</td><td>Pass</td><td>Device key present</td><td>Low</td></tr></tbody></table>
+        </div>
+      </article>
+
+      <aside class="portal-auth-card">
+        <h2>Control flow</h2>
+        <ol class="portal-control-flow"><li>Confirm customer licence</li><li>Verify user role and tenant</li><li>Confirm device and environment</li><li>Record audit evidence for support</li></ol>
+        <div class="hr"></div>
+        <p class="small"><strong>Access rule:</strong> Inventory licence, role, device, tenant, and environment context must all pass before this workflow becomes operational.</p>
+        <a class="btn secondary portal-back-btn" href="/app/dashboard.html#workflows">Back to dashboard</a>
+      </aside>
+    </section>
+  </main>
+</div>
+<script src="/app/portal-demo-auth.js"></script>
+</body>
+</html>

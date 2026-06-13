@@ -1,0 +1,68 @@
+{
+  "phase": "Wave 5 Phase 2",
+  "name": "Security & Multi-Tenant Verification",
+  "categories": [
+    {
+      "key": "organisation_isolation",
+      "required": true,
+      "checks": [
+        "cross_org_users_blocked",
+        "cross_org_licenses_blocked",
+        "cross_org_devices_blocked",
+        "cross_org_onboarding_blocked",
+        "cross_org_sessions_blocked"
+      ]
+    },
+    {
+      "key": "role_boundaries",
+      "required": true,
+      "checks": [
+        "staff_admin_users_denied",
+        "staff_invite_user_denied",
+        "manager_ownership_change_denied",
+        "supervisor_license_allocation_denied"
+      ]
+    },
+    {
+      "key": "environment_separation",
+      "required": true,
+      "checks": [
+        "live_training_leak_blocked",
+        "live_test_leak_blocked",
+        "training_live_leak_blocked",
+        "disabled_environment_switch_denied"
+      ]
+    },
+    {
+      "key": "license_enforcement",
+      "required": true,
+      "checks": [
+        "expired_license_denied",
+        "suspended_license_denied",
+        "missing_entitlement_denied",
+        "permission_without_license_denied"
+      ]
+    },
+    {
+      "key": "device_trust",
+      "required": true,
+      "checks": [
+        "invalid_activation_code_denied",
+        "expired_activation_code_denied",
+        "suspended_device_denied",
+        "retired_device_denied"
+      ]
+    },
+    {
+      "key": "audit_integrity",
+      "required": true,
+      "checks": [
+        "access_denied_logged",
+        "role_change_logged",
+        "license_change_logged",
+        "session_revoke_logged",
+        "device_lifecycle_logged"
+      ]
+    }
+  ]
+}

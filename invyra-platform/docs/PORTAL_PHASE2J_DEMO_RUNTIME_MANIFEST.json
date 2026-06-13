@@ -1,0 +1,35 @@
+{
+  "phase": "2J",
+  "name": "Read-only Demo Runtime Results Review",
+  "baseline": "Phase 2I — Inventory Read-only Demo Seed Pack",
+  "scripts": {
+    "smoke": "npm run smoke:inventory-demo-readonly",
+    "review": "npm run review:inventory-demo-runtime-results",
+    "verify": "npm run verify:portal-phase2j"
+  },
+  "expectedPrerequisites": [
+    "npm run db:seed",
+    "npm run seed:inventory-readonly-demo",
+    "npm run dev"
+  ],
+  "runtimeAssertions": [
+    "demo readiness counts visible",
+    "demo item rows visible",
+    "demo supplier rows visible",
+    "demo movement rows visible",
+    "demo configuration row visible",
+    "writeEnabled false",
+    "uploadsEnabled false",
+    "stockMutationEnabled false"
+  ],
+  "portalBoundary": {
+    "readOnlyPortal": true,
+    "writesEnabled": false,
+    "uploadsEnabled": false,
+    "importsEnabled": false,
+    "stockMutationEnabled": false,
+    "crmOperationalAccess": false,
+    "posOperationalAccess": false
+  },
+  "recommendedNextPhase": "Phase 2K — Inventory Read-only Demo Portal UX QA"
+}

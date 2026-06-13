@@ -1,0 +1,18 @@
+{
+  "phase": "Portal Phase 1J",
+  "target": "http://localhost:3000",
+  "generatedAt": "not-run-yet",
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0
+  },
+  "checks": [
+    {
+      "ok": null,
+      "name": "Run npm run smoke:portal after the local server is started",
+      "detail": "This template is replaced by portal-runtime-smoke-results.json after runtime smoke testing.",
+      "route": "general"
+    }
+  ]
+}

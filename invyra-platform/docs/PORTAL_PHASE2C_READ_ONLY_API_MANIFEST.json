@@ -1,0 +1,24 @@
+{
+  "phase": "2C",
+  "name": "Read-only Inventory API Foundation",
+  "status": "READ_ONLY_API_READY",
+  "baseline": "invyra_website_portal_phase2b_inventory_data_model_contract_v1.zip",
+  "routesAdded": [
+    "GET /api/inventory/readiness",
+    "GET /api/inventory/items",
+    "GET /api/inventory/suppliers",
+    "GET /api/inventory/movements",
+    "GET /api/inventory/configuration"
+  ],
+  "writeMethodsAdded": false,
+  "prismaSchemaChanged": false,
+  "prismaMigrationsAdded": false,
+  "inventoryPrismaQueriesAdded": false,
+  "uploadsEnabled": false,
+  "csvParsingEnabled": false,
+  "stockMutationEnabled": false,
+  "fakeOperationalDataAdded": false,
+  "configurationPermission": "INVENTORY.ADMINISTER",
+  "defaultReadPermission": "INVENTORY.VIEW",
+  "recommendedNextPhase": "Phase 2D — Inventory Prisma Schema Activation Plan"
+}

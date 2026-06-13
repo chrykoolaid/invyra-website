@@ -1,0 +1,1330 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum OrganisationStatus {
+  PENDING_SETUP
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+enum MembershipStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum RoleName {
+  OWNER
+  ADMINISTRATOR
+  MANAGER
+  SUPERVISOR
+  STAFF
+}
+
+enum ModuleKey {
+  CRM
+  INVENTORY
+  POS
+  LICENSING
+  DEVICES
+  ADMINISTRATION
+}
+
+enum PermissionLevel {
+  VIEW
+  CREATE
+  EDIT
+  APPROVE
+  ADMINISTER
+}
+
+enum EnvironmentName {
+  LIVE
+  TRAINING
+  TEST
+}
+
+enum LicenseStatus {
+  ACTIVE
+  EXPIRING
+  EXPIRED
+  SUSPENDED
+  CANCELLED
+}
+
+enum DeviceStatus {
+  PENDING
+  ACTIVATED
+  SUSPENDED
+  RETIRED
+}
+
+enum DeviceType {
+  POS_REGISTER
+  MANAGER_WORKSTATION
+  INVENTORY_TERMINAL
+  SCANNER
+  BACK_OFFICE_DEVICE
+}
+
+enum OnboardingStatus {
+  REQUESTED
+  UNDER_REVIEW
+  ORGANISATION_CREATED
+  LICENSES_ASSIGNED
+  DEVICES_ASSIGNED
+  PORTAL_READY
+  COMPLETED
+  REJECTED
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  username              String?                @unique
+  displayName           String
+  passwordHash          String
+  status                UserStatus             @default(INVITED)
+  lastLoginAt           DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  ownedOrganisations    Organisation[]         @relation("OrganisationOwner")
+  memberships           OrganisationMembership[]
+  invitedMemberships    OrganisationMembership[] @relation("MembershipInviter")
+  sessions              Session[]
+  passwordResetTokens   PasswordResetToken[]
+  auditLogs             AuditLog[]
+  failedLoginAttempts   FailedLoginAttempt[]
+  permissionOverrides   UserPermissionOverride[]
+  reviewedAccessRequests AccessRequest[]        @relation("AccessRequestReviewer")
+
+  @@index([status])
+}
+
+model Organisation {
+  id                   String                    @id @default(cuid())
+  name                 String
+  legalName            String?
+  tradingName          String?
+  industry             String?
+  country              String                    @default("Philippines")
+  timezone             String                    @default("Asia/Manila")
+  currency             String                    @default("PHP")
+  status               OrganisationStatus        @default(PENDING_SETUP)
+  ownerUserId          String
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+
+  owner                User                      @relation("OrganisationOwner", fields: [ownerUserId], references: [id])
+  memberships          OrganisationMembership[]
+  settings             OrganisationSetting[]
+  environmentSettings  OrganisationEnvironmentSetting[]
+  sessions             Session[]
+  auditLogs            AuditLog[]
+  licenses             License[]
+  devices              Device[]
+  deviceActivationCodes DeviceActivationCode[]
+  onboardingWorkflows  OnboardingWorkflow[]
+  accessRequests       AccessRequest[]
+  notifications        Notification[]
+  platformEvents       PlatformEvent[]
+
+  @@index([status])
+}
+
+model OrganisationSetting {
+  id             String       @id @default(cuid())
+  organisationId String
+  key            String
+  value          String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, key])
+}
+
+model OrganisationMembership {
+  id                String           @id @default(cuid())
+  organisationId    String
+  userId            String
+  roleId            String
+  status            MembershipStatus @default(INVITED)
+  invitedByUserId   String?
+  activatedAt       DateTime?
+  suspendedAt       DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  organisation      Organisation     @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role              Role             @relation(fields: [roleId], references: [id])
+  invitedBy         User?            @relation("MembershipInviter", fields: [invitedByUserId], references: [id])
+  environmentAccess EnvironmentAccess[]
+
+  @@unique([organisationId, userId])
+  @@index([organisationId, status])
+  @@index([userId, status])
+}
+
+model Role {
+  id             String           @id @default(cuid())
+  name           RoleName         @unique
+  description    String?
+  rank           Int
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  memberships    OrganisationMembership[]
+  permissions    RolePermission[]
+}
+
+model Permission {
+  id             String           @id @default(cuid())
+  module         ModuleKey
+  level          PermissionLevel
+  key            String           @unique
+  description    String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  roles          RolePermission[]
+  userOverrides  UserPermissionOverride[]
+
+  @@unique([module, level])
+}
+
+model RolePermission {
+  id             String       @id @default(cuid())
+  roleId         String
+  permissionId   String
+  createdAt      DateTime     @default(now())
+
+  role           Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission     Permission   @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model UserPermissionOverride {
+  id             String       @id @default(cuid())
+  userId         String
+  permissionId   String
+  organisationId String
+  allowed        Boolean
+  reason         String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission     Permission   @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permissionId, organisationId])
+}
+
+model Session {
+  id                String          @id @default(cuid())
+  userId            String
+  organisationId    String
+  environment       EnvironmentName @default(LIVE)
+  sessionTokenHash  String          @unique
+  ipAddress         String?
+  userAgent         String?
+  deviceFingerprint String?
+  loginAt           DateTime        @default(now())
+  lastActivityAt    DateTime        @default(now())
+  expiresAt         DateTime
+  logoutAt          DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisation      Organisation    @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@index([organisationId, environment])
+}
+
+model PasswordResetToken {
+  id              String    @id @default(cuid())
+  userId          String
+  tokenHash       String    @unique
+  expiresAt       DateTime
+  usedAt          DateTime?
+  createdAt       DateTime  @default(now())
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+model FailedLoginAttempt {
+  id              String    @id @default(cuid())
+  userId          String?
+  emailOrUsername String
+  ipAddress       String?
+  userAgent       String?
+  reason          String
+  createdAt       DateTime  @default(now())
+
+  user            User?     @relation(fields: [userId], references: [id])
+
+  @@index([emailOrUsername, createdAt])
+  @@index([ipAddress, createdAt])
+}
+
+model License {
+  id              String          @id @default(cuid())
+  organisationId  String
+  status          LicenseStatus   @default(ACTIVE)
+  startsAt        DateTime        @default(now())
+  expiresAt       DateTime?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  organisation    Organisation    @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  modules         LicenseModule[]
+  users           LicenseUser[]
+  devices         LicenseDevice[]
+  events          LicenseEvent[]
+
+  @@index([organisationId, status])
+}
+
+model LicenseModule {
+  id              String       @id @default(cuid())
+  licenseId       String
+  module          ModuleKey
+  enabled         Boolean      @default(true)
+  allocatedSeats  Int?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  license         License      @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+
+  @@unique([licenseId, module])
+}
+
+model LicenseUser {
+  id              String       @id @default(cuid())
+  licenseId       String
+  userId          String
+  module          ModuleKey?
+  createdAt       DateTime     @default(now())
+
+  license         License      @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+
+  @@unique([licenseId, userId, module])
+}
+
+model LicenseDevice {
+  id              String       @id @default(cuid())
+  licenseId       String
+  deviceId        String?
+  deviceType      DeviceType?
+  module          ModuleKey?
+  createdAt       DateTime     @default(now())
+
+  license         License      @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+
+  @@index([licenseId, deviceType])
+}
+
+model LicenseEvent {
+  id              String       @id @default(cuid())
+  licenseId       String
+  action          String
+  metadata        Json?
+  createdAt       DateTime     @default(now())
+
+  license         License      @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+}
+
+model Device {
+  id                String          @id @default(cuid())
+  organisationId    String
+  deviceName        String
+  deviceType        DeviceType
+  deviceIdentifier  String?         @unique
+  assignedLocation  String?
+  status            DeviceStatus    @default(PENDING)
+  activatedAt       DateTime?
+  retiredAt         DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  organisation      Organisation    @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  assignments       DeviceAssignment[]
+  sessions          DeviceSession[]
+  auditLogs         DeviceAuditLog[]
+
+  @@index([organisationId, status])
+}
+
+model DeviceActivationCode {
+  id              String        @id @default(cuid())
+  organisationId  String
+  codeHash        String        @unique
+  deviceType      DeviceType
+  expiresAt       DateTime
+  consumedAt      DateTime?
+  createdByUserId String?
+  createdAt       DateTime      @default(now())
+
+  organisation    Organisation  @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@index([organisationId, expiresAt])
+}
+
+model DeviceAssignment {
+  id              String      @id @default(cuid())
+  deviceId        String
+  assignedToUserId String?
+  location        String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  device          Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model DeviceSession {
+  id              String      @id @default(cuid())
+  deviceId        String
+  sessionTokenHash String     @unique
+  startedAt       DateTime    @default(now())
+  lastSeenAt      DateTime    @default(now())
+  endedAt         DateTime?
+
+  device          Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model DeviceAuditLog {
+  id              String      @id @default(cuid())
+  deviceId        String
+  action          String
+  metadata        Json?
+  createdAt       DateTime    @default(now())
+
+  device          Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model OrganisationEnvironmentSetting {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environment     EnvironmentName
+  enabled         Boolean         @default(true)
+  visibleLabel    String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  organisation    Organisation    @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, environment])
+}
+
+model EnvironmentAccess {
+  id              String                  @id @default(cuid())
+  membershipId    String
+  environment     EnvironmentName
+  allowed         Boolean                 @default(true)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  membership      OrganisationMembership  @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+
+  @@unique([membershipId, environment])
+}
+
+model AccessRequest {
+  id              String        @id @default(cuid())
+  organisationId  String?
+  requesterName   String
+  requesterEmail  String
+  companyName     String
+  message         String?
+  status          OnboardingStatus @default(REQUESTED)
+  reviewedByUserId String?
+  reviewedAt      DateTime?
+  reviewNotes     String?
+  rejectedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  organisation    Organisation? @relation(fields: [organisationId], references: [id])
+  reviewedBy      User?         @relation("AccessRequestReviewer", fields: [reviewedByUserId], references: [id])
+  workflow        OnboardingWorkflow?
+
+  @@index([status, createdAt])
+  @@index([requesterEmail, createdAt])
+}
+
+model OnboardingWorkflow {
+  id              String        @id @default(cuid())
+  organisationId  String
+  accessRequestId String?       @unique
+  status          OnboardingStatus @default(REQUESTED)
+  startedAt       DateTime      @default(now())
+  completedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  organisation    Organisation  @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  accessRequest   AccessRequest? @relation(fields: [accessRequestId], references: [id])
+  steps           OnboardingStep[]
+  events          OnboardingEvent[]
+
+  @@index([organisationId, status])
+}
+
+model OnboardingStep {
+  id              String       @id @default(cuid())
+  workflowId      String
+  stepKey         String
+  label           String
+  status          String       @default("PENDING")
+  order           Int
+  completedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  workflow        OnboardingWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@unique([workflowId, stepKey])
+}
+
+model OnboardingEvent {
+  id              String       @id @default(cuid())
+  workflowId      String
+  action          String
+  metadata        Json?
+  createdAt       DateTime     @default(now())
+
+  workflow        OnboardingWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id              String           @id @default(cuid())
+  organisationId  String?
+  userId          String?
+  environment     EnvironmentName?
+  module          ModuleKey?
+  action          String
+  result          String           @default("SUCCESS")
+  targetType      String?
+  targetId        String?
+  metadata        Json?
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime         @default(now())
+
+  organisation    Organisation?    @relation(fields: [organisationId], references: [id])
+  user            User?            @relation(fields: [userId], references: [id])
+
+  @@index([organisationId, createdAt])
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}
+
+model Notification {
+  id              String       @id @default(cuid())
+  organisationId  String
+  title           String
+  body            String
+  status          String       @default("UNREAD")
+  createdAt       DateTime     @default(now())
+  readAt          DateTime?
+
+  organisation    Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+}
+
+model PlatformEvent {
+  id              String       @id @default(cuid())
+  organisationId  String?
+  eventType       String
+  payload         Json?
+  processedAt     DateTime?
+  createdAt       DateTime     @default(now())
+
+  organisation    Organisation? @relation(fields: [organisationId], references: [id])
+
+  @@index([eventType, createdAt])
+}
+
+model ServiceRegistry {
+  id              String       @id @default(cuid())
+  serviceKey      String       @unique
+  serviceName     String
+  status          String       @default("RESERVED")
+  description     String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+enum InventoryItemStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum InventoryMovementType {
+  OPENING_BALANCE
+  RECEIVING
+  WASTAGE
+  STORE_USE
+  STOCKTAKE_ADJUSTMENT
+  MANUAL_ADJUSTMENT
+  TRANSFER_IN
+  TRANSFER_OUT
+  SHRINKAGE
+}
+
+enum InventoryPurchaseOrderStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  SENT
+  PARTIALLY_RECEIVED
+  RECEIVED
+  CANCELLED
+}
+
+enum InventoryReceivingStatus {
+  DRAFT
+  CONFIRMED
+  DISCREPANCY_REPORTED
+  CANCELLED
+}
+
+enum InventoryLocationType {
+  WAREHOUSE
+  STORE
+  BRANCH
+  PRODUCTION
+  VEHICLE
+  OTHER
+}
+
+enum InventoryTransferStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  IN_TRANSIT
+  PARTIALLY_RECEIVED
+  RECEIVED
+  CANCELLED
+}
+
+
+
+enum InventoryLossType {
+  WASTAGE
+  DAMAGE
+  EXPIRY
+  SHRINKAGE
+  MARKDOWN
+}
+
+enum InventoryLossStatus {
+  DRAFT
+  RECORDED
+  REVIEW_REQUIRED
+  APPROVED
+  CLOSED
+  CANCELLED
+}
+
+enum InventoryDamageDisposition {
+  SCRAP
+  SUPPLIER_RETURN
+  QUARANTINE
+  RECOVERABLE
+  NONE
+}
+
+enum InventoryMarkdownStatus {
+  ACTIVE
+  SOLD_THROUGH
+  EXPIRED
+  CANCELLED
+}
+
+
+enum InventoryConsumptionStatus {
+  DRAFT
+  REQUESTED
+  APPROVED
+  RECORDED
+  CANCELLED
+}
+
+enum InventoryCostCenterStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum InventoryImportStatus {
+  DRAFT
+  VALIDATING
+  VALIDATION_FAILED
+  READY_TO_COMMIT
+  COMMITTED
+  CANCELLED
+}
+
+enum InventoryConfigurationStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+
+enum InventoryStocktakeType {
+  FULL
+  CYCLE
+  BLIND
+}
+
+enum InventoryStocktakeStatus {
+  DRAFT
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  RECONCILED
+  CANCELLED
+}
+
+enum InventoryStocktakeLineStatus {
+  UNCOUNTED
+  COUNTED
+  VARIANCE_REVIEW
+  APPROVED
+  POSTED
+}
+
+enum InventoryForecastRunStatus {
+  GENERATED
+  REVIEWED
+  APPROVED
+  CANCELLED
+}
+
+enum InventoryRecommendationType {
+  ROP
+  ROQ
+  TRANSFER_OPTIMIZATION
+  NEW_STORE_STOCKING
+  SUPPLIER_SCORING
+}
+
+enum InventoryRecommendationStatus {
+  OPEN
+  APPROVED
+  REJECTED
+  APPLIED
+  ARCHIVED
+}
+
+enum InventoryCommercialCheckStatus {
+  PASS
+  FAIL
+  BLOCKED
+  REVIEW_REQUIRED
+}
+
+model InventoryLocation {
+  id              String              @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  code            String
+  name            String
+  type            InventoryLocationType @default(WAREHOUSE)
+  status          InventoryItemStatus @default(ACTIVE)
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  @@unique([organisationId, environmentName, code])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventoryItem {
+  id               String              @id @default(cuid())
+  organisationId   String
+  environmentName  EnvironmentName
+  sku              String
+  barcode          String?
+  name             String
+  description      String?
+  category         String?
+  brand            String?
+  unitOfMeasure    String              @default("each")
+  status           InventoryItemStatus @default(ACTIVE)
+  archivedAt       DateTime?
+  archivedByUserId String?
+  createdByUserId  String?
+  updatedByUserId  String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@unique([organisationId, environmentName, sku])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, barcode])
+}
+
+model InventoryStockBalance {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  locationId      String
+  itemId          String
+  quantityOnHand  Decimal         @default(0)
+  lastMovementId  String?
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, locationId, itemId])
+  @@index([organisationId, environmentName, itemId])
+  @@index([organisationId, environmentName, locationId])
+}
+
+model InventoryMovement {
+  id              String                @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  locationId      String
+  itemId          String
+  movementType    InventoryMovementType
+  quantityDelta   Decimal
+  quantityBefore  Decimal?
+  quantityAfter   Decimal?
+  referenceType   String?
+  referenceId     String?
+  reason          String?
+  createdByUserId String?
+  deviceId        String?
+  createdAt       DateTime              @default(now())
+
+  @@index([organisationId, environmentName, itemId, createdAt])
+  @@index([organisationId, environmentName, locationId, createdAt])
+  @@index([organisationId, environmentName, movementType])
+}
+
+model InventorySupplier {
+  id               String              @id @default(cuid())
+  organisationId   String
+  environmentName  EnvironmentName
+  supplierCode     String
+  name             String
+  contactName      String?
+  phone            String?
+  email            String?
+  address          String?
+  notes            String?
+  status           InventoryItemStatus @default(ACTIVE)
+  archivedAt       DateTime?
+  archivedByUserId String?
+  createdByUserId  String?
+  updatedByUserId  String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@unique([organisationId, environmentName, supplierCode])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventorySupplierItem {
+  id               String          @id @default(cuid())
+  organisationId   String
+  environmentName  EnvironmentName
+  supplierId       String
+  itemId           String
+  supplierSku      String?
+  packSize         Decimal?
+  leadTimeDays     Int?
+  lastUnitCost     Decimal?
+  preferred        Boolean         @default(false)
+  createdByUserId  String?
+  updatedByUserId  String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, supplierId, itemId])
+  @@index([organisationId, environmentName, itemId])
+  @@index([organisationId, environmentName, supplierId])
+}
+
+model InventoryPurchaseOrder {
+  id              String                       @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  orderNumber     String
+  supplierId      String?
+  status          InventoryPurchaseOrderStatus @default(DRAFT)
+  expectedDate    DateTime?
+  notes           String?
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  sentAt          DateTime?
+  cancelledAt     DateTime?
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime                     @default(now())
+  updatedAt       DateTime                     @updatedAt
+
+  @@unique([organisationId, environmentName, orderNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, supplierId])
+}
+
+model InventoryPurchaseOrderLine {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  purchaseOrderId String
+  itemId          String
+  supplierItemId  String?
+  quantityOrdered Decimal
+  unitCost        Decimal?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([organisationId, environmentName, purchaseOrderId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryReceivingBatch {
+  id              String                   @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  receiptNumber   String
+  purchaseOrderId String?
+  status          InventoryReceivingStatus @default(DRAFT)
+  receivedByUserId String?
+  confirmedAt     DateTime?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+
+  @@unique([organisationId, environmentName, receiptNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, purchaseOrderId])
+}
+
+model InventoryReceivingLine {
+  id               String          @id @default(cuid())
+  organisationId   String
+  environmentName  EnvironmentName
+  receivingBatchId String
+  itemId           String
+  quantityExpected Decimal?
+  quantityReceived Decimal
+  discrepancyReason String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([organisationId, environmentName, receivingBatchId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryTransfer {
+  id                    String                  @id @default(cuid())
+  organisationId        String
+  environmentName       EnvironmentName
+  transferNumber        String
+  sourceLocationId      String
+  destinationLocationId String
+  status                InventoryTransferStatus @default(DRAFT)
+  reason                String?
+  submittedAt           DateTime?
+  approvedAt            DateTime?
+  dispatchedAt          DateTime?
+  receivedAt            DateTime?
+  cancelledAt           DateTime?
+  createdByUserId       String?
+  updatedByUserId       String?
+  approvedByUserId      String?
+  dispatchedByUserId    String?
+  receivedByUserId      String?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+
+  @@unique([organisationId, environmentName, transferNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, sourceLocationId])
+  @@index([organisationId, environmentName, destinationLocationId])
+}
+
+model InventoryTransferLine {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  transferId      String
+  itemId          String
+  requestedQty    Decimal
+  approvedQty     Decimal?
+  dispatchedQty   Decimal?
+  receivedQty     Decimal?
+  discrepancyReason String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([organisationId, environmentName, transferId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+
+model InventoryCostCenter {
+  id              String                    @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  code            String
+  name            String
+  department      String?
+  status          InventoryCostCenterStatus @default(ACTIVE)
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  @@unique([organisationId, environmentName, code])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventoryConsumptionTemplate {
+  id              String                    @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  templateCode    String
+  name            String
+  department      String?
+  costCenterId    String?
+  version         Int                       @default(1)
+  status          InventoryCostCenterStatus @default(ACTIVE)
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  @@unique([organisationId, environmentName, templateCode, version])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventoryConsumptionTemplateLine {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  templateId      String
+  itemId          String
+  quantity        Decimal
+  unitOfMeasure   String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([organisationId, environmentName, templateId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryConsumptionEvent {
+  id              String                     @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  consumptionNumber String
+  status          InventoryConsumptionStatus @default(RECORDED)
+  sourceType      String                     @default("MANUAL")
+  templateId      String?
+  costCenterId    String?
+  department      String?
+  locationId      String
+  reason          String
+  totalCost       Decimal?
+  approvedByUserId String?
+  createdByUserId String?
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+
+  @@unique([organisationId, environmentName, consumptionNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, costCenterId])
+  @@index([organisationId, environmentName, locationId])
+}
+
+model InventoryConsumptionLine {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  consumptionEventId String
+  itemId          String
+  quantity        Decimal
+  unitCost        Decimal?
+  lineCost        Decimal?
+  movementId      String?
+  createdAt       DateTime        @default(now())
+
+  @@index([organisationId, environmentName, consumptionEventId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryConfiguration {
+  id              String                       @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  key             String
+  valueJson       Json
+  status          InventoryConfigurationStatus @default(ACTIVE)
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime                     @default(now())
+  updatedAt       DateTime                     @updatedAt
+
+  @@unique([organisationId, environmentName, key])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventoryImportBatch {
+  id              String                @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  importType      String
+  status          InventoryImportStatus @default(DRAFT)
+  filename        String?
+  rowCount        Int                   @default(0)
+  validRowCount   Int                   @default(0)
+  invalidRowCount Int                   @default(0)
+  createdByUserId String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  @@index([organisationId, environmentName, importType, status])
+}
+
+model InventoryImportRow {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  batchId         String
+  rowNumber       Int
+  rawJson         Json
+  normalizedJson  Json?
+  status          String          @default("PENDING")
+  errorJson       Json?
+  createdAt       DateTime        @default(now())
+
+  @@unique([batchId, rowNumber])
+  @@index([organisationId, environmentName, batchId, status])
+}
+
+
+model InventoryLossEvent {
+  id                 String                      @id @default(cuid())
+  organisationId     String
+  environmentName    EnvironmentName
+  lossNumber         String
+  lossType           InventoryLossType
+  status             InventoryLossStatus          @default(RECORDED)
+  itemId             String
+  locationId         String?
+  quantity           Decimal
+  unitCost           Decimal?
+  lossValue          Decimal?
+  reason             String
+  subreason          String?
+  comment            String?
+  batchNumber        String?
+  lotNumber          String?
+  expiryDate         DateTime?
+  disposition        InventoryDamageDisposition?
+  movementId         String?
+  approvedByUserId   String?
+  createdByUserId    String?
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
+
+  @@unique([organisationId, environmentName, lossNumber])
+  @@index([organisationId, environmentName, lossType, status])
+  @@index([organisationId, environmentName, itemId])
+  @@index([organisationId, environmentName, locationId])
+}
+
+model InventoryMarkdownEvent {
+  id                  String                  @id @default(cuid())
+  organisationId      String
+  environmentName     EnvironmentName
+  markdownNumber      String
+  itemId              String
+  locationId          String?
+  batchNumber         String?
+  lotNumber           String?
+  expiryDate          DateTime?
+  originalPrice       Decimal
+  markdownPrice       Decimal
+  markdownPercent     Decimal?
+  quantityMarked      Decimal
+  quantityRemaining   Decimal
+  replacementBarcode  String?
+  status              InventoryMarkdownStatus @default(ACTIVE)
+  reason              String?
+  createdByUserId     String?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+
+  @@unique([organisationId, environmentName, markdownNumber])
+  @@index([organisationId, environmentName, itemId, status])
+  @@index([organisationId, environmentName, expiryDate])
+}
+
+model InventoryStocktake {
+  id                  String                    @id @default(cuid())
+  organisationId      String
+  environmentName     EnvironmentName
+  stocktakeNumber     String
+  stocktakeType       InventoryStocktakeType    @default(CYCLE)
+  status              InventoryStocktakeStatus  @default(DRAFT)
+  locationId          String?
+  blindCount          Boolean                   @default(false)
+  notes               String?
+  submittedAt         DateTime?
+  approvedAt          DateTime?
+  reconciledAt        DateTime?
+  cancelledAt         DateTime?
+  createdByUserId     String?
+  approvedByUserId    String?
+  reconciledByUserId  String?
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+
+  @@unique([organisationId, environmentName, stocktakeNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, locationId])
+}
+
+model InventoryStocktakeLine {
+  id                  String                       @id @default(cuid())
+  organisationId      String
+  environmentName     EnvironmentName
+  stocktakeId         String
+  itemId              String
+  locationId          String
+  expectedQty         Decimal?
+  countedQty          Decimal?
+  varianceQty         Decimal?
+  unitCost            Decimal?
+  varianceValue       Decimal?
+  status              InventoryStocktakeLineStatus @default(UNCOUNTED)
+  reason              String?
+  movementId          String?
+  countedByUserId     String?
+  reviewedByUserId    String?
+  createdAt           DateTime                     @default(now())
+  updatedAt           DateTime                     @updatedAt
+
+  @@unique([organisationId, environmentName, stocktakeId, itemId, locationId])
+  @@index([organisationId, environmentName, stocktakeId])
+  @@index([organisationId, environmentName, itemId])
+  @@index([organisationId, environmentName, locationId])
+}
+
+model InventoryForecastRun {
+  id                    String                     @id @default(cuid())
+  organisationId        String
+  environmentName       EnvironmentName
+  runNumber             String
+  status                InventoryForecastRunStatus @default(GENERATED)
+  sourceWindowDays      Int                        @default(30)
+  forecastHorizonDays   Int                        @default(30)
+  generatedAt           DateTime                   @default(now())
+  reviewedAt            DateTime?
+  approvedAt            DateTime?
+  createdByUserId       String?
+  notes                 String?
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
+
+  @@unique([organisationId, environmentName, runNumber])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, generatedAt])
+}
+
+model InventoryForecastRecommendation {
+  id                  String                         @id @default(cuid())
+  organisationId      String
+  environmentName     EnvironmentName
+  forecastRunId       String?
+  recommendationType  InventoryRecommendationType
+  status              InventoryRecommendationStatus  @default(OPEN)
+  itemId              String
+  sourceLocationId    String?
+  targetLocationId    String?
+  supplierId          String?
+  demand30Days        Decimal?
+  forecastQty         Decimal?
+  recommendedQty      Decimal
+  reorderPoint        Decimal?
+  reorderQty          Decimal?
+  coverageDays        Decimal?
+  confidenceScore     Decimal?
+  reason              String
+  generatedAt         DateTime                       @default(now())
+  appliedAt           DateTime?
+  createdByUserId     String?
+  createdAt           DateTime                       @default(now())
+  updatedAt           DateTime                       @updatedAt
+
+  @@index([organisationId, environmentName, forecastRunId])
+  @@index([organisationId, environmentName, recommendationType, status])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventorySupplierScorecard {
+  id                    String          @id @default(cuid())
+  organisationId        String
+  environmentName       EnvironmentName
+  supplierId            String
+  score                 Decimal         @default(0)
+  leadTimeScore         Decimal?
+  fulfillmentScore      Decimal?
+  discrepancyScore      Decimal?
+  priceStabilityScore   Decimal?
+  notes                 String?
+  calculatedAt          DateTime        @default(now())
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, supplierId])
+  @@index([organisationId, environmentName, score])
+}
+
+model InventoryCommercialControlCheck {
+  id                  String                         @id @default(cuid())
+  organisationId      String
+  environmentName     EnvironmentName
+  checkKey            String
+  area                String
+  status              InventoryCommercialCheckStatus @default(REVIEW_REQUIRED)
+  evidence            String?
+  reviewedAt          DateTime?
+  reviewedByUserId    String?
+  createdAt           DateTime                       @default(now())
+  updatedAt           DateTime                       @updatedAt
+
+  @@unique([organisationId, environmentName, checkKey])
+  @@index([organisationId, environmentName, area, status])
+}
+

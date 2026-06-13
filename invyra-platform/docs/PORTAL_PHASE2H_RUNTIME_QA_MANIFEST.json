@@ -1,0 +1,27 @@
+{
+  "phase": "2H",
+  "title": "Inventory Read-only Portal Runtime QA + Local Data Seed Review",
+  "status": "implemented",
+  "baseline": "Phase 2G \u2014 Inventory Read-only Portal Data Binding",
+  "added": [
+    "Inventory read-only API runtime smoke script",
+    "Inventory local seed review script",
+    "Phase 2H verification script",
+    "Runtime QA guide",
+    "Local data seed review document",
+    "Runtime QA matrix"
+  ],
+  "boundaries": [
+    "no writes",
+    "no uploads",
+    "no CSV parsing",
+    "no stock mutation",
+    "no fake inventory seed rows required",
+    "no CRM/POS operational launch"
+  ],
+  "commands": [
+    "npm run smoke:inventory-readonly-api",
+    "npm run review:inventory-seed",
+    "npm run verify:portal-phase2h"
+  ]
+}

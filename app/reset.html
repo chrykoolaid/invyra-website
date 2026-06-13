@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal — Reset Password</title>
+<meta name="description" content="Portal reset password workflow." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a class="active" href="/app/">Login</a>
+      <a class="" href="/app/dashboard.html">Inventory Dashboard</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main">
+
+    <header class="portal-app-topbar">
+      <div><strong>Reset password</strong><small>Token validation before account recovery</small></div>
+      <div class="portal-app-pills"><span>Minimum 12 characters</span><span>Hashed token</span><span>Session renewal</span></div>
+    </header>
+    <section class="portal-login-layout">
+      <article class="portal-auth-card">
+        <p class="badge">Reset password</p>
+        <h1>Choose a new password.</h1>
+        <p class="p">This completes the recovery workflow and returns the user to the secure Inventory login path.</p>
+      </article>
+      <aside class="portal-auth-card">
+        <form class="portal-auth-form" action="/app/" method="get">
+          <label>Reset token<input name="token" autocomplete="one-time-code" placeholder="Reset token" required /></label>
+          <label>New password<input name="password" type="password" autocomplete="new-password" minlength="12" required /></label>
+          <button class="btn" type="submit">Update password</button>
+        </form>
+        <div class="portal-auth-links"><a href="/app/forgot-password.html">Request a new token</a><a href="/app/">Back to login</a></div>
+      </aside>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

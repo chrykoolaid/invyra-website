@@ -1,0 +1,52 @@
+{
+  "install": {
+    "status": "not_run",
+    "notes": "Run npm install, then npm run doctor.",
+    "errors": []
+  },
+  "prisma": {
+    "status": "not_run",
+    "notes": "Run npm run prisma:generate and npm run prisma:migrate -- --name wave5_phase1j_runtime_bug_fix_pack.",
+    "errors": []
+  },
+  "seed": {
+    "status": "not_run",
+    "notes": "Run npm run db:seed twice to confirm idempotent seed behaviour.",
+    "errors": []
+  },
+  "runtime": {
+    "status": "not_run",
+    "notes": "Run npm run dev and open http://localhost:3000.",
+    "errors": []
+  },
+  "auth": {
+    "status": "not_run",
+    "notes": "Validate login with owner@invyra.local and seeded password.",
+    "errors": []
+  },
+  "roles": {
+    "status": "not_run",
+    "notes": "Run npm run verify:seeded-roles and confirm Staff cannot access admin surfaces.",
+    "errors": []
+  },
+  "environments": {
+    "status": "not_run",
+    "notes": "Validate LIVE/TRAINING/TEST availability and environment switch audit logging.",
+    "errors": []
+  },
+  "devices": {
+    "status": "not_run",
+    "notes": "Validate activation code generation, device activation, suspend, and retire paths.",
+    "errors": []
+  },
+  "licensing": {
+    "status": "not_run",
+    "notes": "Validate demo license, module entitlements, and consumption endpoint.",
+    "errors": []
+  },
+  "audit": {
+    "status": "not_run",
+    "notes": "Validate login/access denied/role/license/device events are visible in audit APIs.",
+    "errors": []
+  }
+}

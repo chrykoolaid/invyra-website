@@ -1,0 +1,15 @@
+
+> invyra-platform@0.1.0-wave5-phase3 verify:inventory-sprints
+> node scripts/verify-inventory-sprints.mjs
+
+Inventory Sprint 1 static verification passed.
+Inventory Sprint 2 verification passed: ledger service, routes, UI, migration, protections and docs are present.
+Inventory Sprint 3 verification passed: procurement foundation present and stock mutation remains disabled.
+Sprint 4 verification passed. Receiving foundation is present and ledger-backed.
+Inventory Sprint 5 verification passed
+Sprint 6 verification passed: loss, damage, expiry, shrinkage, and markdown foundation is present and ledger-governed.
+Sprint 7 verification passed: consumption and cost-center foundation is present and ledger-governed.
+Sprint 8 verification passed: stocktakes, variance review, and reconciliation ledger controls are present.
+Sprint 9 verification passed: forecasting, ROP/ROQ, supplier scoring, transfer optimization, and new-store stocking contracts are present.
+Sprint 10 verification passed: commercial hardening controls are present and evidence-backed.
+Inventory Sprint 1–10 verification passed. Coverage is structurally present for RC1 preparation.

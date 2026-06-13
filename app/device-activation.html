@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal — Device Activation</title>
+<meta name="description" content="Portal device activation workflow." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a class="active" href="/app/">Login</a>
+      <a class="" href="/app/dashboard.html">Inventory Dashboard</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main">
+
+    <header class="portal-app-topbar">
+      <div><strong>Device activation</strong><small>Register a device before operational inventory use</small></div>
+      <div class="portal-app-pills"><span>Device aware</span><span>Role checked</span><span>Audit logged</span></div>
+    </header>
+    <section class="portal-login-layout">
+      <article class="portal-auth-card">
+        <p class="badge">Device gate</p>
+        <h1>Activate the workstation or scanner.</h1>
+        <p class="p">Inventory users should not blindly enter operational workflows from unknown devices. Device activation supports controlled rollout and support traceability.</p>
+        <div class="portal-flow-list">
+          <div class="portal-flow-step"><b>1</b><div><strong>Enter activation code</strong><small>Code is issued by admin or onboarding support.</small></div></div>
+          <div class="portal-flow-step"><b>2</b><div><strong>Assign device type</strong><small>Register, manager station, scanner, receiving tablet, or support device.</small></div></div>
+          <div class="portal-flow-step"><b>3</b><div><strong>Open allowed workflows</strong><small>Device context is visible in audit and support review.</small></div></div>
+        </div>
+      </article>
+      <aside class="portal-auth-card">
+        <form class="portal-auth-form" action="/app/dashboard.html" method="get">
+          <label>Activation code<input name="activationCode" placeholder="INV-123456" required /></label>
+          <label>Device name<input name="deviceName" placeholder="Receiving tablet 01" required /></label>
+          <label>Device type<select name="deviceType"><option>Inventory workstation</option><option>Receiving device</option><option>Scanner</option><option>Manager station</option><option>Support device</option></select></label>
+          <button class="btn" type="submit">Activate device</button>
+        </form>
+        <div class="portal-auth-links"><a href="/app/">Back to login</a><a href="/app/request-access.html">Request activation help</a></div>
+      </aside>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

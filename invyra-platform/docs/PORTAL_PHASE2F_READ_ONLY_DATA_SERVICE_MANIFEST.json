@@ -1,0 +1,22 @@
+{
+  "phase": "2F",
+  "name": "Read-only Inventory Data Service Wiring",
+  "baseline": "invyra_website_portal_phase2e_prisma_schema_activation_implementation_v1.zip",
+  "status": "implemented",
+  "readOnlyDataServiceConnected": true,
+  "writeEnabled": false,
+  "uploadsEnabled": false,
+  "stockMutationEnabled": false,
+  "routes": [
+    "/api/inventory/readiness",
+    "/api/inventory/items",
+    "/api/inventory/suppliers",
+    "/api/inventory/movements",
+    "/api/inventory/configuration"
+  ],
+  "serviceFiles": [
+    "lib/inventory/inventory-read-only-service.ts",
+    "lib/inventory/inventory-read-only-api.ts"
+  ],
+  "nextRecommendedPhase": "Phase 2G \u2014 Inventory Read-only Portal Data Binding"
+}

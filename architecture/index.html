@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Architecture — Inventory-First Platform Architecture</title>
+<meta name="description" content="Invyra architecture is staged around Inventory first, supported by authentication, organisations, licensing, users, devices, environments, and audit foundations." />
+<meta property="og:title" content="Invyra Architecture — Inventory-First Platform Architecture" />
+<meta property="og:description" content="Invyra architecture is staged around Inventory first, supported by authentication, organisations, licensing, users, devices, environments, and audit foundations." />
+<meta property="og:image" content="/invyra-og.png" />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/styles.css" />
+
+</head>
+<body>
+<header class="site-header">
+  <div class="site-shell nav-shell">
+    <a class="brand" href="/" aria-label="Invyra home">
+      <img class="brand-logo" src="/invyra-logo-header.png" alt="Invyra logo" />
+      <span class="brand-copy"><strong>Invyra</strong><small>Inventory-first platform</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
+    <nav id="site-menu" class="site-menu" aria-label="Primary navigation">
+      <a class="nav-link " href="/">Home</a><a class="nav-link " href="/products/inventory/">Inventory</a><a class="nav-link " href="/products/">Products</a><a class="nav-link " href="/industries/">Solutions</a><a class="nav-link active" href="/security/">Security</a><a class="nav-link " href="/pricing/">Pricing</a><a class="nav-link " href="/roadmap/">Roadmap</a><a class="nav-link " href="/portal/">Portal</a><a class="nav-link " href="/contact/">Contact</a>
+      <a class="btn btn-small" href="/get-started/">Get Started</a>
+      <a class="btn btn-ghost btn-small" href="/app/">Inventory Portal</a>
+    </nav>
+  </div>
+</header>
+<main>
+
+<section class="hero"><div class="site-shell"><p class="kicker">Architecture</p><h1>Inventory-first platform architecture.</h1><p class="lead">Invyra is being built with foundations for authentication, organisations, licensing, users, devices, environments, audit, and future module expansion — starting with Inventory as the first commercial product.</p><div class="hero-actions"><a class="btn" href="/products/inventory/">Explore Inventory</a><a class="btn btn-ghost" href="/roadmap/">View Roadmap</a></div></div></section>
+<section class="section"><div class="site-shell split"><div><p class="kicker">Staged platform model</p><h2>One product first. Wider ecosystem later.</h2><p>The architecture is staged so Inventory can become commercially reliable before CRM, POS, and additional ecosystem modules are introduced commercially.</p></div><div class="diagram vertical"><span>Website</span><b>↓</b><span>Portal</span><b>↓</b><span>Authentication</span><b>↓</b><span>Organisation</span><b>↓</b><span>Licence Check</span><b>↓</b><span>Inventory Dashboard</span><b>↓</b><span>Inventory Workflows</span></div></div></section>
+<section class="section muted"><div class="site-shell"><div class="section-head"><p class="kicker">Inventory workflow architecture</p><h2>From item truth to audit visibility.</h2></div><div class="diagram"><span>Item Master</span><b>→</b><span>Movement Ledger</span><b>→</b><span>Orders</span><b>→</b><span>Receiving</span><b>→</b><span>Waste / Store Use</span><b>→</b><span>Reports</span><b>→</b><span>Audit</span></div></div></section>
+<section class="section"><div class="site-shell"><div class="section-head"><p class="kicker">Platform foundations</p><h2>Designed to support Inventory access and future expansion.</h2></div><div class="card-grid four">
+<article class="info-card"><span class="card-kicker">Foundation</span><h3>Authentication</h3><p>Access entry and session foundations for future authenticated use.</p></article><article class="info-card"><span class="card-kicker">Foundation</span><h3>Organisations and Users</h3><p>Organisation context, users, memberships, roles, and permissions.</p></article><article class="info-card"><span class="card-kicker">Foundation</span><h3>Licensing and Devices</h3><p>Module entitlement, device context, activation, and access governance.</p></article><article class="info-card"><span class="card-kicker">Foundation</span><h3>Environments and Audit</h3><p>LIVE / TRAINING / TEST separation and audit-aware event visibility.</p></article></div></div></section>
+
+</main>
+<footer class="site-footer"><div class="site-shell footer-grid">
+    <div><h4>Product</h4><a href="/products/inventory/">Invyra Inventory</a><a href="/pricing/">Inventory Pricing</a><a href="/get-started/">Inventory Readiness</a><a href="/portal/">Inventory Portal</a></div>
+    <div><h4>Future Ecosystem</h4><a href="/roadmap/#future-modules">CRM — Future Module</a><a href="/roadmap/#future-modules">POS — Future Module</a><a href="/roadmap/#intelligence">Forecasting — Future Extension</a><a href="/roadmap/#future-modules">Purchasing Extensions</a></div>
+    <div><h4>Trust</h4><a href="/security/">Security</a><a href="/architecture/">Architecture</a><a href="/enterprise/">Enterprise</a><a href="/training/">Training Mode</a></div>
+    <div><h4>Support</h4><a href="/support/">Inventory Support</a><a href="/docs/">Docs</a><a href="/status/">Status</a><a href="/contact/">Contact</a></div>
+  </div><div class="site-shell footer-bottom"><span>© <span id="year"></span> Invyra. Inventory-first commercial readiness.</span><span>CRM and POS are future ecosystem modules.</span></div></footer>
+<script src="/script.js"></script>
+</body>
+</html>

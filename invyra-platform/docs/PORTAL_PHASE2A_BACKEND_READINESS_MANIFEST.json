@@ -1,0 +1,57 @@
+{
+  "phase": "2A",
+  "status": "AUDIT_READY",
+  "baseline": "invyra_website_portal_phase1m_inventory_first_portal_phase1_lock_v1.zip",
+  "output": "invyra_website_portal_phase2a_backend_integration_readiness_audit_v1.zip",
+  "decision": "Proceed to Phase 2B before backend wiring.",
+  "foundationReady": [
+    "authentication_session",
+    "organisation_context",
+    "role_membership_permissions",
+    "licence_entitlement_checks",
+    "environment_access",
+    "audit_log_foundation",
+    "api_guard_pattern",
+    "protected_inventory_portal_routes"
+  ],
+  "inventoryBackendMissing": [
+    "InventoryItem",
+    "InventoryLocation",
+    "InventoryStockBalance",
+    "InventoryMovement",
+    "InventorySupplier",
+    "InventorySupplierItem",
+    "InventoryPurchaseOrder",
+    "InventoryReceivingSession",
+    "InventoryDiscrepancy",
+    "InventoryWastageEvent",
+    "InventoryStoreUseEvent",
+    "InventoryReorderRule",
+    "InventoryGapScanRun",
+    "InventoryStocktakeSession",
+    "InventoryImportBatch",
+    "InventoryConfiguration"
+  ],
+  "safeFirstBackendCandidates": [
+    "GET /api/inventory/readiness",
+    "GET /api/inventory/items",
+    "GET /api/inventory/suppliers",
+    "GET /api/inventory/movements",
+    "GET /api/inventory/configuration"
+  ],
+  "deferred": [
+    "uploads",
+    "csv_parsing",
+    "import_commit",
+    "stock_mutation",
+    "purchase_order_submission",
+    "receiving_confirmation",
+    "wastage_posting",
+    "store_use_posting",
+    "stocktake_posting",
+    "report_export",
+    "crm_operational_portal",
+    "pos_operational_portal"
+  ],
+  "recommendedNextPhase": "Phase 2B \u2014 Inventory Data Model Contract"
+}

@@ -1,0 +1,173 @@
+// Inventory Prisma Schema Draft — Phase 2B
+//
+// CONTRACT DRAFT ONLY.
+// Do not paste this into prisma/schema.prisma until the migration phase is explicitly scoped.
+// This draft intentionally does not run as part of the current app.
+
+// Suggested enums for future migration:
+// enum InventoryItemStatus { ACTIVE INACTIVE ARCHIVED }
+// enum InventoryMovementType { OPENING_BALANCE RECEIVING WASTAGE STORE_USE STOCKTAKE_ADJUSTMENT MANUAL_ADJUSTMENT TRANSFER_IN TRANSFER_OUT }
+// enum InventoryPurchaseOrderStatus { DRAFT SUBMITTED APPROVED REJECTED SENT PARTIALLY_RECEIVED RECEIVED CANCELLED }
+// enum InventoryReceivingStatus { DRAFT CONFIRMED DISCREPANCY_REPORTED CANCELLED }
+// enum InventoryImportStatus { DRAFT VALIDATING VALIDATION_FAILED READY_TO_COMMIT COMMITTED CANCELLED }
+// enum InventoryConfigurationStatus { DRAFT ACTIVE ARCHIVED }
+
+model InventoryLocation {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  code            String
+  name            String
+  status          String          @default("ACTIVE")
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, environmentName, code])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventoryItem {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  sku             String
+  barcode         String?
+  name            String
+  description     String?
+  unitOfMeasure   String          @default("each")
+  status          String          @default("ACTIVE")
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, sku])
+  @@index([organisationId, environmentName, status])
+  @@index([organisationId, environmentName, barcode])
+}
+
+model InventoryStockBalance {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  locationId      String
+  itemId          String
+  quantityOnHand  Decimal         @default(0)
+  lastMovementId  String?
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, locationId, itemId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryMovement {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  locationId      String
+  itemId          String
+  movementType    String
+  quantityDelta   Decimal
+  quantityAfter   Decimal?
+  referenceType   String?
+  referenceId     String?
+  reason          String?
+  createdByUserId String?
+  deviceId        String?
+  createdAt       DateTime        @default(now())
+
+  @@index([organisationId, environmentName, itemId, createdAt])
+  @@index([organisationId, environmentName, locationId, createdAt])
+  @@index([organisationId, environmentName, movementType])
+}
+
+model InventorySupplier {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  supplierCode    String
+  name            String
+  contactName     String?
+  phone           String?
+  email           String?
+  status          String          @default("ACTIVE")
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, supplierCode])
+  @@index([organisationId, environmentName, status])
+}
+
+model InventorySupplierItem {
+  id               String          @id @default(cuid())
+  organisationId   String
+  environmentName  EnvironmentName
+  supplierId       String
+  itemId           String
+  supplierSku      String?
+  packSize         Decimal?
+  leadTimeDays     Int?
+  lastUnitCost     Decimal?
+  preferred        Boolean         @default(false)
+  createdByUserId  String?
+  updatedByUserId  String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, supplierId, itemId])
+  @@index([organisationId, environmentName, itemId])
+}
+
+model InventoryConfiguration {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  key             String
+  valueJson       Json
+  status          String          @default("ACTIVE")
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([organisationId, environmentName, key])
+}
+
+model InventoryImportBatch {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  importType      String
+  status          String          @default("DRAFT")
+  filename        String?
+  rowCount        Int             @default(0)
+  validRowCount   Int             @default(0)
+  invalidRowCount Int             @default(0)
+  createdByUserId String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([organisationId, environmentName, importType, status])
+}
+
+model InventoryImportRow {
+  id              String          @id @default(cuid())
+  organisationId  String
+  environmentName EnvironmentName
+  batchId         String
+  rowNumber       Int
+  rawJson         Json
+  normalizedJson  Json?
+  status          String          @default("PENDING")
+  errorJson       Json?
+  createdAt       DateTime        @default(now())
+
+  @@unique([batchId, rowNumber])
+  @@index([organisationId, environmentName, batchId, status])
+}

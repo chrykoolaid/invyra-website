@@ -1,0 +1,52 @@
+{
+  "program": "INVYRA WEBSITE / PORTAL BUILD DEVELOPMENT PROGRAM",
+  "phase": "2B",
+  "name": "Inventory Data Model Contract",
+  "status": "CONTRACT_READY",
+  "baseline": "invyra_website_portal_phase2a_backend_integration_readiness_audit_v1.zip",
+  "outputPackage": "invyra_website_portal_phase2b_inventory_data_model_contract_v1.zip",
+  "contractOnly": true,
+  "prismaSchemaChanged": false,
+  "apiRoutesAdded": false,
+  "uploadsEnabled": false,
+  "stockMutationEnabled": false,
+  "crmPosOperationalAccessEnabled": false,
+  "requiredScopeFields": ["organisationId", "environmentName"],
+  "firstModelSlice": [
+    "InventoryLocation",
+    "InventoryItem",
+    "InventoryStockBalance",
+    "InventoryMovement",
+    "InventorySupplier",
+    "InventorySupplierItem",
+    "InventoryConfiguration",
+    "InventoryImportBatch",
+    "InventoryImportRow"
+  ],
+  "firstReadOnlyApiCandidates": [
+    "GET /api/inventory/readiness",
+    "GET /api/inventory/items",
+    "GET /api/inventory/suppliers",
+    "GET /api/inventory/movements",
+    "GET /api/inventory/configuration"
+  ],
+  "deferred": [
+    "POST /api/inventory/items",
+    "POST /api/inventory/suppliers",
+    "POST /api/inventory/imports",
+    "POST /api/inventory/opening-balances",
+    "POST /api/inventory/orders",
+    "POST /api/inventory/receiving",
+    "POST /api/inventory/wastage",
+    "POST /api/inventory/store-use",
+    "POST /api/inventory/stocktake",
+    "csv_parsing",
+    "import_commit",
+    "stock_mutation",
+    "purchase_order_submission",
+    "receiving_confirmation",
+    "crm_operational_portal",
+    "pos_operational_portal"
+  ],
+  "recommendedNextPhase": "Phase 2C — Read-only Inventory API Foundation"
+}

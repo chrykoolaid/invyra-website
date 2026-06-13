@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invyra Portal — Request Access</title>
+<meta name="description" content="Request Inventory portal access." />
+<link rel="icon" href="/logo.png" />
+<link rel="stylesheet" href="/app/portal.css" />
+</head>
+<body class="portal-app-body">
+<div class="portal-app-shell">
+  <aside class="portal-app-sidebar">
+    <a class="portal-app-brand" href="/portal/"><img src="/invyra-logo-header.png" alt="Invyra logo" /><span>Invyra Portal</span></a>
+    <nav class="portal-app-nav" aria-label="Portal navigation">
+      <a class="active" href="/app/">Login</a>
+      <a class="" href="/app/dashboard.html">Inventory Dashboard</a>
+      <a href="/app/device-activation.html">Device Activation</a>
+      <a href="/app/request-access.html">Request Access</a>
+      <a href="/app/forgot-password.html">Forgot Password</a>
+      <span class="locked">CRM · Future module</span>
+      <span class="locked">POS · Future module</span>
+    </nav>
+  </aside>
+  <main class="portal-app-main">
+
+    <header class="portal-app-topbar">
+      <div><strong>Inventory access request</strong><small>For prospective or pending licensed customers</small></div>
+      <div class="portal-app-pills"><span>Inventory only</span><span>Onboarding queue</span><span>No CRM/POS access</span></div>
+    </header>
+    <section class="portal-login-layout">
+      <article class="portal-auth-card">
+        <p class="badge">Request access</p>
+        <h1>Start the Inventory portal path.</h1>
+        <p class="p">Customers request access to Inventory first. Future modules do not appear as purchasable operational products.</p>
+      </article>
+      <aside class="portal-auth-card">
+        <form class="portal-auth-form" action="/app/thanks.html" method="get">
+          <label>Name<input name="name" placeholder="Your name" required /></label>
+          <label>Business email<input name="email" type="email" placeholder="owner@company.com" required /></label>
+          <label>Organisation<input name="organisation" placeholder="Company name" required /></label>
+          <label>Inventory need<select name="need"><option>Inventory readiness review</option><option>Portal access setup</option><option>Training / TEST environment</option><option>Device activation</option><option>Commercial licence discussion</option></select></label>
+          <button class="btn" type="submit">Request Inventory Access</button>
+        </form>
+        <div class="portal-auth-links"><a href="/app/">Already have access?</a></div>
+      </aside>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

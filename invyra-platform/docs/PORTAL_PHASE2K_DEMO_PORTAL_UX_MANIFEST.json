@@ -1,0 +1,19 @@
+{
+  "phase": "2K",
+  "name": "Inventory Read-only Demo Portal UX QA",
+  "baseline": "Phase 2J",
+  "status": "LOCK_READY",
+  "readOnlyBoundary": true,
+  "writesEnabled": false,
+  "uploadsEnabled": false,
+  "stockMutationEnabled": false,
+  "crmOperational": false,
+  "posOperational": false,
+  "checks": [
+    "demo UX metadata added to read-only portal binding",
+    "Inventory Dashboard shows Phase 2K demo UX banner",
+    "dashboard tables show demo UX review notes",
+    "workflow tables show demo UX review notes",
+    "no write routes added"
+  ]
+}

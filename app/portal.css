@@ -1,0 +1,220 @@
+
+/* Invyra Portal Demo (static) */
+:root{
+  --bg:#071021;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.10);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.70);
+  --accent: rgba(0,200,255,0.85);
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1100px 520px at 20% 0%, rgba(0,200,255,0.18), transparent 60%),
+              radial-gradient(900px 520px at 90% 20%, rgba(255,120,0,0.10), transparent 55%),
+              var(--bg);
+  color: var(--text);
+}
+a{ color: inherit; }
+.wrap{
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 28px 24px 60px;
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 22px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+.brand img{ height:34px; width:auto; display:block; }
+.badge{
+  font-size:12px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
+  color: var(--muted);
+}
+.grid{
+  display:grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap:16px;
+}
+@media (max-width: 880px){
+  .grid{ grid-template-columns: 1fr; }
+}
+.card{
+  border:1px solid var(--border);
+  background: var(--card);
+  border-radius: 18px;
+  padding: 18px;
+}
+.h1{
+  margin: 0 0 8px;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+.p{ margin: 0 0 14px; color: var(--muted); line-height:1.55; }
+.kv{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  margin-top: 10px;
+}
+.kv .item{
+  border:1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.18);
+  border-radius: 14px;
+  padding: 12px;
+}
+.kv .label{ font-size:12px; color: var(--muted); margin-bottom:6px; }
+.kv .value{ font-weight:800; }
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.input{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.22);
+  color: var(--text);
+  outline:none;
+}
+.input:focus{ border-color: rgba(0,200,255,0.65); box-shadow: 0 0 0 3px rgba(0,200,255,0.12); }
+.btn{
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,200,255,0.45);
+  background: rgba(0,200,255,0.14);
+  color: var(--text);
+  font-weight:800;
+  cursor:pointer;
+}
+.btn:hover{ background: rgba(0,200,255,0.20); }
+.btn.secondary{
+  border-color: rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+}
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.small{
+  font-size:12px;
+  color: var(--muted);
+  line-height:1.45;
+}
+.hr{ height:1px; background: rgba(255,255,255,0.08); margin: 14px 0; }
+.table{
+  width:100%;
+  border-collapse: collapse;
+  overflow:hidden;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,0.10);
+}
+.table th, .table td{
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align:left;
+  font-size: 13px;
+}
+.table th{ color: rgba(255,255,255,0.78); font-weight:800; }
+.table tr:last-child td{ border-bottom:none; }
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  font-size: 12px;
+  color: rgba(255,255,255,0.82);
+}
+.pill.ok{ border-color: rgba(0,200,255,0.35); background: rgba(0,200,255,0.10); }
+
+
+.row.between{justify-content:space-between; align-items:center;}
+.link{color:#b9d7ff; text-decoration:none; font-size:13px;}
+.link:hover{text-decoration:underline;}
+
+
+/* Portal Login Workflow Recovery v1 */
+.portal-app-body{background:#071021;color:var(--text);min-height:100vh;}
+.portal-app-shell{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh;background:radial-gradient(900px 420px at 20% 0%,rgba(0,200,255,.13),transparent 62%),#071021;}
+.portal-app-sidebar{border-right:1px solid rgba(255,255,255,.10);background:rgba(3,9,21,.78);padding:22px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;}
+.portal-app-brand{display:flex;align-items:center;gap:10px;font-weight:900;text-decoration:none;}
+.portal-app-brand img{height:34px;width:auto;}
+.portal-app-nav{display:grid;gap:8px;}
+.portal-app-nav a,.portal-app-nav span{padding:10px 12px;border-radius:12px;text-decoration:none;color:rgba(255,255,255,.78);border:1px solid transparent;}
+.portal-app-nav a.active{background:rgba(0,200,255,.13);border-color:rgba(0,200,255,.30);color:#fff;font-weight:900;}
+.portal-app-nav span.locked{color:rgba(255,255,255,.42);background:rgba(255,255,255,.03);}
+.portal-app-main{padding:24px;min-width:0;}
+.portal-app-topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);border-radius:18px;padding:14px 16px;margin-bottom:18px;}
+.portal-app-topbar small{display:block;color:rgba(255,255,255,.62);margin-top:2px;}
+.portal-app-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.portal-app-pills span{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:999px;padding:7px 9px;font-size:12px;color:rgba(255,255,255,.76);}
+.portal-login-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);gap:18px;align-items:stretch;}
+.portal-auth-card,.portal-dashboard-card,.portal-workflow-card{border:1px solid rgba(255,255,255,.10);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border-radius:22px;padding:22px;}
+.portal-auth-card h1{font-size:42px;line-height:1;margin:0 0 12px;letter-spacing:-.04em;}
+.portal-auth-form{display:grid;gap:12px;}
+.portal-auth-form label{display:grid;gap:7px;color:#dce6ff;font-weight:800;}
+.portal-auth-form input,.portal-auth-form select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);color:#fff;}
+.portal-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.portal-auth-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:#b9d7ff;}
+.portal-flow-list{display:grid;gap:10px;margin-top:14px;}
+.portal-flow-step{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.15);border-radius:14px;padding:12px;}
+.portal-flow-step b{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:rgba(0,200,255,.14);border:1px solid rgba(0,200,255,.32);}
+.portal-flow-step strong{display:block;}
+.portal-flow-step small{color:rgba(255,255,255,.64);display:block;margin-top:3px;line-height:1.4;}
+.portal-dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+.portal-dashboard-card span,.portal-workflow-card span{display:block;color:#aeb8d6;font-size:12px;text-transform:uppercase;letter-spacing:.11em;font-weight:900;margin-bottom:8px;}
+.portal-dashboard-card strong{display:block;font-size:28px;letter-spacing:-.03em;}
+.portal-dashboard-card p,.portal-workflow-card p{color:rgba(255,255,255,.66);line-height:1.45;margin:8px 0 0;}
+.portal-workflow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.portal-workflow-card a{display:inline-flex;margin-top:14px;color:#dce6ff;font-weight:900;}
+.portal-auth-note{border-left:3px solid rgba(0,200,255,.45);background:rgba(0,200,255,.08);border-radius:12px;padding:12px;color:rgba(255,255,255,.76);line-height:1.5;}
+@media(max-width:1020px){.portal-app-shell{grid-template-columns:1fr}.portal-app-sidebar{position:relative;height:auto}.portal-login-layout,.portal-dashboard-grid,.portal-workflow-grid{grid-template-columns:1fr}.portal-app-topbar{display:grid}.portal-app-pills{justify-content:flex-start}}
+
+
+/* Portal Demo Credentials Recovery v1 */
+.portal-demo-credentials{margin-top:16px;border:1px solid rgba(0,200,255,.20);background:rgba(0,200,255,.07);border-radius:18px;padding:16px;}
+.portal-demo-credentials h2{font-size:20px;margin:8px 0 8px;letter-spacing:-.02em;}
+.portal-demo-account-grid{display:grid;gap:10px;margin-top:12px;}
+.portal-demo-account{width:100%;text-align:left;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);color:#fff;border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:4px;}
+.portal-demo-account:hover{border-color:rgba(0,200,255,.45);background:rgba(0,200,255,.10);}
+.portal-demo-account strong{font-size:15px;}
+.portal-demo-account span{color:#dce6ff;font-weight:800;}
+.portal-demo-account small{color:rgba(255,255,255,.68);}
+.portal-auth-error{border:1px solid rgba(255,120,0,.35);background:rgba(255,120,0,.10);color:#ffe4cc;border-radius:12px;padding:10px 12px;margin:0 0 12px;line-height:1.4;}
+.portal-logout-pill{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:999px;padding:7px 9px;font-size:12px;color:rgba(255,255,255,.86);text-decoration:none;font-weight:900;}
+.portal-logout-pill:hover{border-color:rgba(0,200,255,.40);background:rgba(0,200,255,.10);}
+
+
+/* Portal Workflow Link Recovery v1 */
+.portal-workflow-hero h1{font-size:46px;line-height:1;margin:8px 0 12px;letter-spacing:-.045em;}
+.portal-kpi-grid{margin:16px 0;}
+.portal-workflow-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:16px;align-items:start;}
+.portal-workflow-layout h2{margin:0 0 8px;font-size:24px;letter-spacing:-.03em;}
+.portal-action-row{margin:12px 0 14px;}
+.table-wrap{overflow:auto;border-radius:14px;}
+.portal-control-flow{margin:12px 0 0;padding-left:22px;color:rgba(255,255,255,.75);line-height:1.55;}
+.portal-control-flow li{margin-bottom:10px;}
+.portal-inline-notice{border:1px solid rgba(0,200,255,.22);background:rgba(0,200,255,.08);border-radius:12px;padding:10px 12px;color:#dce6ff;margin:10px 0 14px;}
+.portal-back-btn{display:inline-flex;margin-top:12px;text-decoration:none;}
+@media(max-width:1020px){.portal-workflow-layout{grid-template-columns:1fr}.portal-workflow-hero h1{font-size:36px}.portal-kpi-grid{grid-template-columns:1fr}}

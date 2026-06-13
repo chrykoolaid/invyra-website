@@ -1,0 +1,27 @@
+{
+  "phase": "2I",
+  "name": "Inventory Read-only Demo Seed Pack",
+  "baseline": "Phase 2H — Runtime QA + Local Data Seed Review",
+  "seedScript": "prisma/seed-inventory-readonly-demo.ts",
+  "packageScript": "seed:inventory-readonly-demo",
+  "defaultOrganisationId": "invyra_demo_organisation",
+  "environments": ["LIVE", "TRAINING", "TEST"],
+  "seededCategories": [
+    "InventoryLocation",
+    "InventoryItem",
+    "InventorySupplier",
+    "InventoryStockBalance",
+    "InventoryMovement",
+    "InventoryConfiguration"
+  ],
+  "portalBoundary": {
+    "readOnlyPortal": true,
+    "writesEnabled": false,
+    "uploadsEnabled": false,
+    "importsEnabled": false,
+    "stockMutationEnabled": false,
+    "crmOperationalAccess": false,
+    "posOperationalAccess": false
+  },
+  "recommendedNextPhase": "Phase 2J — Read-only Demo Runtime Results Review"
+}

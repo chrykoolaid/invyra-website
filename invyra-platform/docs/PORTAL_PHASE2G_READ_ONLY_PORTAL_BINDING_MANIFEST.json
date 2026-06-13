@@ -1,0 +1,42 @@
+{
+  "phase": "2G",
+  "title": "Inventory Read-only Portal Data Binding",
+  "status": "implemented",
+  "baseline": "invyra_website_portal_phase2f_read_only_data_service_wiring_v1.zip",
+  "addedFiles": [
+    "lib/portal/inventory-read-only-portal-binding.ts",
+    "scripts/verify-portal-phase2g.mjs",
+    "docs/PORTAL_BUILD_PHASE2G_IMPLEMENTATION_REPORT.md",
+    "docs/PORTAL_BUILD_PHASE2G_ACCEPTANCE_TESTS.md",
+    "docs/INVENTORY_READ_ONLY_PORTAL_DATA_BINDING.md"
+  ],
+  "editedFiles": [
+    "app/portal/inventory/page.tsx",
+    "app/portal/inventory/[workflow]/page.tsx",
+    "app/globals.css",
+    "package.json",
+    "docs/ROUTE_PROTECTION_MANIFEST.md"
+  ],
+  "boundCollections": [
+    "InventoryItem",
+    "InventorySupplier",
+    "InventoryMovement",
+    "InventoryConfiguration"
+  ],
+  "boundCounts": [
+    "InventoryLocation",
+    "InventoryItem",
+    "InventorySupplier",
+    "InventoryStockBalance",
+    "InventoryMovement",
+    "InventoryConfiguration",
+    "InventoryImportBatch"
+  ],
+  "writeEnabled": false,
+  "uploadsEnabled": false,
+  "importsEnabled": false,
+  "stockMutationEnabled": false,
+  "crmOperational": false,
+  "posOperational": false,
+  "nextRecommendedPhase": "Phase 2H — Inventory Read-only Portal Runtime QA + Local Data Seed Review"
+}
